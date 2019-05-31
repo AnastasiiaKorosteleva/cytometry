@@ -60,30 +60,39 @@ for i in st:
 '''делим на отдельные векторы'''
 
 
-intensity = split_list(intensity, wanted_parts=12)
 
-first_plate = intensity[0:6]
-second_plate = intensity[6:12]
-
-print(first_plate)
+B = 'B		ST1_1	ST1_2	ST1_3	ST1_4	ST1_5	ST1_6	ST1_7	ST1_8	ST1_9	ST1_10			ST1_1	ST1_2	ST1_3	ST1_4	ST1_5	ST1_6	ST1_7	ST1_8	ST1_9	ST1_10			ST1_1	ST1_2	ST1_3	ST1_4	ST1_5	ST1_6	ST1_7	ST1_8	ST1_9	ST1_10			ST2_1	ST2_2	ST2_3	ST2_4	ST2_5	ST2_6	ST2_7	ST2_8	ST2_9	ST2_10			ST2_1	ST2_2	ST2_3	ST2_4	ST2_5	ST2_6	ST2_7	ST2_8	ST2_9	ST2_10			ST3_1	ST3_2	ST3_3	ST3_4	ST3_5	ST3_6	ST3_7	ST3_8	ST3_9	ST3_10			ST3_1	ST3_2	ST3_3	ST3_4	ST3_5	ST3_6	ST3_7	ST3_8	ST3_9	ST3_10			ST3_1	ST3_2	ST3_3	ST3_4	ST3_5	ST3_6	ST3_7	ST3_8	ST3_9	ST3_10			ST4_1	ST4_2	ST4_3	ST4_4	ST4_5	ST4_6	ST4_7	ST4_8	ST4_9	ST4_10			ST4_1	ST4_2	ST4_3	ST4_4	ST4_5	ST4_6	ST4_7	ST4_8	ST4_9	ST4_10			ST4_1	ST4_2	ST4_3	ST4_4	ST4_5	ST4_6	ST4_7	ST4_8	ST4_9	ST4_10																																												'
 
 
 
+concentrations = []
+for i in data:
+    concentrations.append(i[0].split('-'))
+conc=[]
+for i in concentrations:
+    conc.append(i[1])
+concentrations.clear()
+for i in conc[:10]:
+    concentrations.append(float(i))
 
-B = 'B		ST1_1	ST1_2	ST1_3	ST1_4	ST1_5	ST1_6	ST1_7	ST1_8	ST1_9	ST1_10			ST1_1	ST1_2	ST1_3	ST1_4	ST1_5	ST1_6	ST1_7	ST1_8	ST1_9	ST1_10			ST1_1	ST1_2	ST1_3	ST1_4	ST1_5	ST1_6	ST1_7	ST1_8	ST1_9	ST1_10			ST2_1	ST2_2	ST2_3	ST2_4	ST2_5	ST2_6	ST2_7	ST2_8	ST2_9	ST2_10			ST2_1	ST2_2	ST2_3	ST2_4	ST2_5	ST2_6	ST2_7	ST2_8	ST2_9	ST2_10			ST3_1	ST3_2	ST3_3	ST3_4	ST3_5	ST3_6	ST3_7	ST3_8	ST3_9	ST3_10			ST5_1	ST5_2	ST5_3	ST5_4	ST5_5	ST5_6	ST5_7	ST5_8	ST5_9	ST5_10			ST5_1	ST5_2	ST5_3	ST5_4	ST5_5	ST5_6	ST5_7	ST5_8	ST5_9	ST5_10			ST5_1	ST5_2	ST5_3	ST5_4	ST5_5	ST5_6	ST5_7	ST5_8	ST5_9	ST5_10			ST7_1	ST7_2	ST7_3	ST7_4	ST7_5	ST7_6	ST7_7	ST7_8	ST7_9	ST7_10			ST7_1	ST7_2	ST7_3	ST7_4	ST7_5	ST7_6	ST7_7	ST7_8	ST7_9	ST7_10			ST7_1	ST7_2	ST7_3	ST7_4	ST7_5	ST7_6	ST7_7	ST7_8	ST7_9	ST7_10																																												'
-print(B)
 
 
-# with open('fr.txt', 'w') as fr:
-#     print(result.to_string(index=False, header=False), file=fr)
+
+
+
 
 d = [x for x in range(216)]
 with open('try.txt', 'w') as tre:
     print('<>', end='	', file=tre)
     for i in d:
         print(i+1, end='	', file=tre)
-    print()
+
     print('\nA', end='	', file=tre)
     for i in range(216):
         print('',end='	', file=tre)
-
+    print('\n',B, file=tre)
+    for i in range(10):
+        print(*concentrations, sep='\t',end='		', file=tre)
+    print('\nB', end='	', file=tre)
+    for i in intensity:
+        print(i, sep='\t',end='\t', file=tre)
