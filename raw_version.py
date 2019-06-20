@@ -1,12 +1,11 @@
 import csv
+import datetime
+import sys
 
-'''function to split lists'''
 
 
-def split_list(alist, wanted_parts=1):
-
-    length = len(alist)
-    return [alist[i*length // wanted_parts: (i+1)*length // wanted_parts] for i in range(wanted_parts)]
+now = datetime.datetime.now()
+time_now = (now.year, now.month, now.day, now.hour, now.minute, now.second)
 
 
 '''reading the file'''
@@ -19,53 +18,49 @@ with open('2019-04-09_BCD057.csv', newline='') as csvfile:
 '''cut technical lines'''
 data = table[6:]
 names = table[2]
-
-
 Tube_name = [data[i][0] for i in range(len(data))]
 Sample_id = [data[i][1] for i in range(len(data)) if data[i][1].startswith('ST')]
 Singlets = [data[i][2] for i in range(len(data))]
 Intensities = [data[i][3] for i in range(len(data))]
-
-
 Tube_name = [i.split('-') for i in Tube_name]
 Concentrations = [Tube_name[i][1] for i in range(len(Tube_name))]
+
+
+
 '''exclude isotype & unstained'''
 indexes = []
+controls = []
 for i in range(len(Concentrations)):
     if not Concentrations[i].isalpha():
         indexes.append(i)
+    else:
+        controls.append(i)
 
 
-
-Intensities = [Intensities[i] for i in indexes]
+intensities = [Intensities[i] for i in indexes]
+Controls = [data[i] for i in controls]
 Concentrations = [i for i in Concentrations if not i.isalpha()]
-
-
-with open('template.acs', 'r+') as template:
-
-    for i in template:
-        i.strip()
-
 first_string = [i+1 for i in range(216)]
 
-with open('output.txt','w') as output:
+
+with open('output.asc','w', encoding='ASCII') as output:
     print('<>', *first_string, sep='\t', end='\t', file=output)
-    print('\nA', '\t'*len(first_string),  file=output)
-    print('B\t', *Intensities[:10], '\t', *Intensities[60:70], sep='\t', end='\t',  file=output)
+    print('\nA', '\t'*len(first_string), sep='\t', file=output)
+    print('B\t', *intensities[:10], '\t', *intensities[60:70], sep='\t', end='\t',  file=output)
     print('\t'*193, file=output)
-    print('C\t',*Intensities[10:20], '\t', *Intensities[70:80], sep='\t', end='\t',  file=output)
+    print('C\t',*intensities[10:20], '\t', *intensities[70:80], sep='\t', end='\t',  file=output)
     print('\t'*193, file=output)
-    print('D\t', *Intensities[20:30], '\t', *Intensities[80:90], sep='\t', end='\t', file=output)
+    print('D\t', *intensities[20:30], '\t', *intensities[80:90], sep='\t', end='\t', file=output)
     print('\t' * 193, file=output)
-    print('E\t', *Intensities[30:40], '\t', *Intensities[90:100], sep='\t', end='\t', file=output)
+    print('E\t', *intensities[30:40], '\t', *intensities[90:100], sep='\t', end='\t', file=output)
     print('\t' * 193, file=output)
-    print('F\t', *Intensities[40:50], '\t', *Intensities[100:110], sep='\t', end='\t', file=output)
+    print('F\t', *intensities[40:50], '\t', *intensities[100:110], sep='\t', end='\t', file=output)
     print('\t' * 193, file=output)
-    print('G\t', *Intensities[50:60], '\t', *Intensities[110:120], sep='\t', end='\t', file=output)
+    print('G\t', *intensities[50:60], '\t', *intensities[110:120], sep='\t', end='\t', file=output)
     print('\t' * 193, file=output)
-    print('H', '\t' * len(first_string), file=output)
+    print('H', '\t' * len(first_string), sep='\t', file=output)
     print('<>', *first_string, sep='\t', end='\t', file=output)
-    print('\nA', '\t' * len(first_string), file=output)
+    print('\nA', '\t' * len(first_string), sep='\t', file=output)
     print('B\t', *Concentrations[:10], '\t', *Concentrations[60:70], sep='\t', end='\t', file=output)
     print('\t' * 193, file=output)
     print('C\t', *Concentrations[10:20], '\t', *Concentrations[70:80], sep='\t', end='\t', file=output)
@@ -78,9 +73,9 @@ with open('output.txt','w') as output:
     print('\t' * 193, file=output)
     print('G\t', *Concentrations[50:60], '\t', *Concentrations[110:120], sep='\t', end='\t', file=output)
     print('\t' * 193, file=output)
-    print('H', '\t' * len(first_string), file=output)
+    print('H', '\t' * len(first_string),sep='\t', file=output)
     print('<>', *first_string, sep='\t', end='\t', file=output)
-    print('\nA', '\t' * len(first_string), file=output)
+    print('\nA', '\t' * len(first_string),sep='\t', file=output)
     print('B\t', *Sample_id[:10], '\t', *Sample_id[60:70], sep='\t', end='\t', file=output)
     print('\t' * 193, file=output)
     print('C\t', *Sample_id[10:20], '\t', *Sample_id[70:80], sep='\t', end='\t', file=output)
@@ -93,6 +88,25 @@ with open('output.txt','w') as output:
     print('\t' * 193, file=output)
     print('G\t', *Sample_id[50:60], '\t', *Sample_id[110:120], sep='\t', end='\t', file=output)
     print('\t' * 193, file=output)
-    print('H', '\t' * len(first_string), file=output)
+    print('H', '\t' * len(first_string), sep='\t', file=output)
+    print('Date of measurement: ', end='', file=output)
+    print(now.year, now.month, now.day, sep='-', end='', file=output)
+    print('/Time of measurement: ', end='', file=output)
+    print(now.hour, now.minute, now.second, sep=':', file=output)
 
+    print('Project: ADAL', file=output)
+    print('Subject: Cytometry', file=output, )
+    print('User: -', file=output)
+    print('ST1: -', file=output)
+    print('ST2: -', file=output)
+    print('ST3: -', file=output)
+    print('ST4: -', file=output)
+    print('Number of plates: 2', file=output)
+    print('---', file=output)
 
+df=[]
+for i in range(len(Concentrations)):
+    df.append(Concentrations[i].replace('.', ','))
+    if Concentrations[i] == '0':
+        df.append(Concentrations[i].replace('0', '0,0000001'))
+print(df)
