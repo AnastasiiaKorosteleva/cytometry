@@ -1,8 +1,7 @@
 import csv
 import datetime
+import getpass
 import sys
-
-
 
 now = datetime.datetime.now()
 time_now = (now.year, now.month, now.day, now.hour, now.minute, now.second)
@@ -10,7 +9,7 @@ time_now = (now.year, now.month, now.day, now.hour, now.minute, now.second)
 
 '''reading the file'''
 table = []
-with open('2019-04-09_BCD057.csv', newline='') as csvfile:
+with open(sys.argv[1], newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=';')
     for row in spamreader:
         table.append(row)
@@ -24,8 +23,6 @@ Singlets = [data[i][2] for i in range(len(data))]
 Intensities = [data[i][3] for i in range(len(data))]
 Tube_name = [i.split('-') for i in Tube_name]
 Concentrations = [Tube_name[i][1] for i in range(len(Tube_name))]
-
-
 
 '''exclude isotype & unstained'''
 indexes = []
@@ -42,7 +39,15 @@ Controls = [data[i] for i in controls]
 Concentrations = [i for i in Concentrations if not i.isalpha()]
 first_string = [i+1 for i in range(216)]
 
+'''replace ',' with ',' and reduce zeros'''
 
+for i in range(len(Concentrations)):
+    Concentrations[i] = Concentrations[i].replace('.', ',')
+    if Concentrations[i] == '0':
+        Concentrations[i] = '0,0000001'
+
+
+'''output generating, very dirty way'''
 with open('output.asc','w', encoding='ASCII') as output:
     print('<>', *first_string, sep='\t', end='\t', file=output)
     print('\nA', '\t'*len(first_string), sep='\t', file=output)
@@ -93,20 +98,13 @@ with open('output.asc','w', encoding='ASCII') as output:
     print(now.year, now.month, now.day, sep='-', end='', file=output)
     print('/Time of measurement: ', end='', file=output)
     print(now.hour, now.minute, now.second, sep=':', file=output)
-
     print('Project: ADAL', file=output)
-    print('Subject: Cytometry', file=output, )
-    print('User: -', file=output)
-    print('ST1: -', file=output)
-    print('ST2: -', file=output)
-    print('ST3: -', file=output)
-    print('ST4: -', file=output)
+    print('Subject: Binding', file=output, )
+    print('User:', getpass.getuser(),file=output)
+    print('ST1: 1', file=output)
+    print('ST2: 2', file=output)
+    print('ST3: 3', file=output)
+    print('ST4: 4', file=output)
     print('Number of plates: 2', file=output)
     print('---', file=output)
 
-df=[]
-for i in range(len(Concentrations)):
-    df.append(Concentrations[i].replace('.', ','))
-    if Concentrations[i] == '0':
-        df.append(Concentrations[i].replace('0', '0,0000001'))
-print(df)
