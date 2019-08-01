@@ -45,7 +45,7 @@ try:
     for i in range(len(Concentrations)):
         Concentrations[i] = Concentrations[i].replace('.', ',')
         if Concentrations[i] == '0':
-            Concentrations[i] = '0,0000001'
+            Concentrations[i] = '0,01'
     name = os.path.basename(sys.argv[1])[:-4]+'.asc'
     first_sample = input('Enter sample 1 name: ')
     second_sample = input('Enter sample 2 name: ')
