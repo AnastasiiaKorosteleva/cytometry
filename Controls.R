@@ -18,8 +18,8 @@ colnames(data) <- names
 unstained <- grep('unstained', data$Tube)
 isotype <- grep('isotype', data$Tube)
 zero <- grep('-0-', data$Tube)
-minimal <- grep('-1.52-', data$Tube
-)
+minimal <- grep('-3.09-', data$Tube
+                )
 indexes <- c(unstained, isotype, zero, minimal)
 data <- data[indexes, ]
 data$`live singlets Median PE-A` <- sapply(as.vector(data$`live singlets Median PE-A`),
@@ -33,9 +33,9 @@ isotype1 <- isotype[1:3]
 isotype2 <- isotype[4:6]
 isotype3 <- isotype[7:9]
 isotype4 <- isotype[10:12]
-min_conc <- grep('-1.52-', data$Tube)
+min_conc <- grep('-3.09-', data$Tube)
 min_conc <- data[min_conc,]
-
+ 
 
 min_conc <- as.numeric(as.vector(min_conc$`live singlets Median PE-A`))
 min_conc1 <- min_conc[1:3]
@@ -163,8 +163,8 @@ my_doc <- my_doc %>%
   body_add_par("PART 2. Unstained vs negative control", style = "Normal") %>% 
   body_add_par("", style = "Normal") %>%
   body_add_flextable(wil_table)
-
-
+  
+ 
 print(my_doc, target = 'C:/Users/korostelevaas/PycharmProjects/cytometry/report.docx')
 
 
