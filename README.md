@@ -1,5 +1,5 @@
-# cytometry
-is inhouse python script to transform data from Flow Cytometry to Infinite format
+# Cytometry
+is inhouse python script to transform data from Flow Cytometry (Beckman Coulter SytoFLEX System) to Infinite format (Plate reader Infinite 200 PRO, Tecan) 
 
 ## Installation
  clone file to your system, launch as classic (python raw_version.py filetotransform.csv)
