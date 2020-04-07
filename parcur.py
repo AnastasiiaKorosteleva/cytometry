@@ -17,19 +17,25 @@ try:
 except IndexError:
     print('There is no file or path is wrong')
     sys.exit()
+except FileNotFoundError:
+    print('There is no file or path is wrong')
+    sys.exit()
+
 
 '''cut technical lines'''
 
 data = table[3:]
 names = table[2]
-
-Tube_name = [data[i][0] for i in range(len(data))]
-Sample_id = [data[i][1] for i in range(len(data)) if data[i][1].startswith('ST')]
-Singlets = [data[i][2] for i in range(len(data))]
-Intensities = [data[i][3] for i in range(len(data))]
-Tube_name = [i.split('-') for i in Tube_name]
-Concentrations = [Tube_name[i][1] for i in range(len(Tube_name))]
-
+try:
+    Tube_name = [data[i][0] for i in range(len(data))]
+    Sample_id = [data[i][1] for i in range(len(data)) if data[i][1].startswith('ST')]
+    Singlets = [data[i][2] for i in range(len(data))]
+    Intensities = [data[i][3] for i in range(len(data))]
+    Tube_name = [i.split('-') for i in Tube_name]
+    Concentrations = [Tube_name[i][1] for i in range(len(Tube_name))]
+except IndexError:
+    print('Input file format is not correct')
+    sys.exit()
 
 '''exclude isotype & unstained
 get indexes where value in Concentration list != numeric'''
@@ -75,6 +81,10 @@ elif plates == 2:
     x = 335
 elif plates == 3:
     x = 325
+else:
+    print('Number of plates can be 1, 2 or 3')
+    print('File did not generated')
+    sys.exit()
 '''output generating'''
 first_string = [i+1 for i in range(360)]
 
