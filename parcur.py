@@ -9,11 +9,14 @@ time_now = (now.year, now.month, now.day, now.hour, now.minute, now.second)
 
 '''reading the file'''
 table = []
-with open(sys.argv[1], newline='') as csvfile:
-    spamreader = csv.reader(csvfile, delimiter=';')
-    for row in spamreader:
-        table.append(row)
-
+try:
+    with open(sys.argv[1], newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=';')
+        for row in spamreader:
+            table.append(row)
+except IndexError:
+    print('There is no file or path is wrong')
+    sys.exit()
 
 '''cut technical lines'''
 
@@ -74,8 +77,8 @@ elif plates == 3:
     x = 325
 '''output generating'''
 first_string = [i+1 for i in range(360)]
-try:
-    with open(name, 'w', encoding='ASCII') as output:
+
+with open(name, 'w', encoding='ASCII') as output:
         print('<>', *first_string, sep='\t', end='\t', file=output)
         print('\nA', '\t'*len(first_string), sep='\t', file=output)
         print('B\t', *intensities[:10], '\t', *intensities[60:70], '\t', *intensities[120:130],
@@ -161,8 +164,3 @@ try:
         print('---', file=output)
 
         print('File successfully converted')
-except:
-    e = sys.exc_info()[0]
-    print("<p>Error: %s</p>" % e)
-
-
